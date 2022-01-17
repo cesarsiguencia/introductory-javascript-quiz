@@ -1,5 +1,6 @@
 body {
     display:flex;
+    flex-direction: column;
     justify-content:center;
     align-items: center;
     height: 100vh;
@@ -21,7 +22,7 @@ main {
 
 } 
 
-.questions-style{
+.first-box-style {
     vertical-align: middle;
     text-align: center;
 }
@@ -30,18 +31,26 @@ h1 {
     text-shadow: 0 -3px 0 #000;
 }
 
-h3 {
+.first-text-style {
     padding: 10px;
 }
 
 
-.button {
+.button-style {
     width: 100%;
     padding: 20px;
     margin: 20px auto;  
     font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     font-size: 18px;
     border-radius: 20px;
+    background-color: #a9a9a9;
+}
+
+.button-style:hover {
+    border-color: black;
+    border-width: 5px;
+    background-color: limegreen;
+
 }
 
 .hide-first {
@@ -60,6 +69,18 @@ h3 {
     font-weight: bold;
     font-size: 18px;
     border-radius: 20px;
+}
+
+.footer-style {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    padding: 30px;
+    font-weight: bold;
+    font-size: 20px;
+    text-align: center;
+
+
 }
 
 
