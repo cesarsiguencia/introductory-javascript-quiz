@@ -6,9 +6,9 @@ var introductionDirections = document.querySelector("#introduction-box")
 var startBtn = document.querySelector("#start-button");
 var optionsBtns = document.getElementsByClassName("button-style");
 var footerBox = document.querySelector("footer");
-var counter = 6;
-
-
+var counter = 30;
+var timer = ""
+var startCountdown = [];
 var questionsArray = [
     {
     question: 'What is the JavaScript command to add a message to the DevTools browser that does not appear on the site ?',
@@ -41,7 +41,7 @@ var questionsArray = [
     },
 
     {
-    question: "What is the different between a JavaScript 'click' vs 'submit' command in addEventLister?",
+    question: "What is the difference between a JavaScript 'click' vs 'submit' command in addEventLister?",
     answers: [
         {text: 'Nothing, they accomplish the same thing', correct: false},
         {text: 'Click is for Enter keyboards presses while Submit is for mouse clicks', correct: false},
@@ -49,42 +49,94 @@ var questionsArray = [
         {text: 'Click refers to starting a function while Submit executes it', correct: false},
         ]
     },
+
+    {
+    question: "Which is the correct way to call the function titled 'mainFunction'?",
+    answers: [
+        {text: 'return mainFunction', correct: false},
+        {text: 'mainFunction();', correct: true},
+        {text: '(mainFunction);', correct: false},
+        {text: 'mainFunction return', correct: false},
+        ]
+    },
+
+    {
+    question: "If attaching a JavaScript source to the body of an HTML file, where must one attach it?",
+    answers: [
+        {text: 'Right before the body ends, above </body>', correct: true},
+        {text: 'Right before the body starts, above <body>', correct: false},
+        {text: 'Right after the entire body section, under </body>', correct: false},
+        {text: 'Right after the body starts, under <body>', correct: false},
+        ]
+    },
+
+    {
+    question: "What JavaScript syntax is used to have two or more conditions as MUST requirements to pass a specific code (Code in which ALL conditions must be met in order to execute)?",
+    answers: [
+        {text: ' == ', correct: false},
+        {text: ' || ', correct: false},
+        {text: ' [] ', correct: false},
+        {text: ' && ', correct: true},
+        ]
+    },
+
+    {
+    question: "Which of the following is an array of objects?",
+    answers: [
+        {text: ' fish = (seabass, tilapia, catfish)', correct: false},
+        {text: ' fish = "seabass", "tilapia", "catfish" ', correct: false},
+        {text: ' fish = ["seabass","tilapia","catfish"] ', correct: true},
+        {text: ' fish = {seabass; tilapia; catfish}', correct: false},
+        ]
+    },
+
+    {
+    question: "What values do Boolean values accept?",
+    answers: [
+        {text: ' Number values ', correct: false},
+        {text: ' String values ', correct: false},
+        {text: ' True or False values ', correct: true},
+        {text: ' Mouse or keyboard values ', correct: false},
+        ]
+    },
+
+    {
+    question: "Consider a global declared value titled 'userPrompt', what will changing it to '!userPrompt' mean later down in the code?",
+    answers: [
+        {text: ' The ! will declare the variable as a value of false ', correct: true},
+        {text: ' The ! will cause the variable to become a priority over other variables ', correct: false},
+        {text: ' The ! will add a numeric value to the variable ', correct: false},
+        {text: ' The ! will create a new variable with the same name ', correct: false},
+        ]
+    },
 ]
 
 var questionsOrder = 0
-var shuffledQuestions = questionsArray.sort(() => Math.random() - .5);
-   // ,
-    // "When setting a timer in JavaScript, what units are used?",
-    // "What should you type to create a dynamic HTML element?",
-    
-    // "What equation is used to declare BOTH conditions must be met in a condition statement?",
-    // "What would you type in the console to get the result for '10+2'?"
-
-
-
-
-
-
+var shuffledQuestions = questionsArray.sort(() => Math.random() - .5);  //shuffles the questions with their appropriate answers
+var correctAnswer = true;
+// var wrongAnswer = [];
  
 
-
 var startQuiz = function(){
-    console.log("Quiz should start")
+    // removing the directions div and the button 'Click Here to Start'. Function initiated by Start button click
     introductionDirections.remove();
     startBtn.remove();
 
-    var timer = document.createElement("div")
-    timer.className = "footer-style"
-    timer.innerHTML = "TIME REMAINING:" + counter--;
-
+    // create timer HTML under quiz element
+    timer = document.createElement("div")
+    timer.className = "footer-style";
     footerBox.appendChild(timer);
 
-
-
-    individualQuestions(shuffledQuestions[questionsOrder]);
-    chooseAnswer(shuffledQuestions[questionsOrder]);
+    createQuestions();
 }
 
+var createQuestions = function(){
+// adding functions for prompts and options to show
+    // shuffles the questions
+    individualQuestions(shuffledQuestions[questionsOrder]);
+    // shuffles the answer choices
+    chooseAnswer(shuffledQuestions.answers[questionsOrder]);
+}
    
 var individualQuestions = function(question){
  
@@ -93,86 +145,66 @@ var individualQuestions = function(question){
     //     console.log(questionsArray[0]);
     // }
 
-
-  
-
+    // creates div to place question in
     var quizQuestions = document.createElement("div");
     quizQuestions.className = "first-box-style";
+    quizBox.innerHTML =""
     quizQuestions.innerHTML = "<h2 class='first-text-style'>" + question.question + "</H2>";
-
     quizBox.appendChild(quizQuestions);
 
-    question.answers.forEach(answer =>{
-    chooseAnswer(answer);
-
+    // takes the answers array object and pushes it as 'answer'
+    question.answers.forEach(choices =>{
+    chooseAnswer(choices);
     })
-
-    // nextQuestion(quizQuestions);
 
 }
 
-var chooseAnswer = function(answer){
+var chooseAnswer = function(choices){
 
-   
-
+    //creates div to place answer buttons in
     var quizOptions = document.createElement("div");
     quizOptions.className = "answers-style";
 
+    // create buttons to press
     var optionBtn1 = document.createElement("button");
     optionBtn1.className = "button-style";
-    optionBtn1.innerHTML = answer.text;
+    optionBtn1.innerHTML = choices.text;
     optionBtn1.setAttribute("id","answer-buttons")
-
-
-
     quizOptions.appendChild(optionBtn1);
- 
-    
-    
     quizBox.appendChild(quizOptions);
-
-
-    // var optionsBtns = querySelector(".button-style");
-
-    // nextQuestion(optionsBtns);
    
     optionBtn1.addEventListener("click", nextQuestion)
 
+    correctAnswer = choices.correct;
+    console.log(correctAnswer);
+    return correctAnswer;
     // nextQuestion(quizOptions);
-    
+    // question.answers.forEach(correctInfo =>{
+    // nextQuestion(correctInfo);
+    // })
 }
 
-var nextQuestion = function(quizQuestions){
+var nextQuestion = function(){
+    //IF USEER FINISHES ALL QUESTIONS, HOW DO I JUMP TO QUIZ END?
 
+    if (correctAnswer === true){
+        alert("Correct answer!")
+        correctAnswer = [];
+    questionsOrder++
+    }
     // quizQuestions.remove();
-    
-    
-
     // for (var i=0; i < questionsArray.length; i++){
-    //     console.log(questionsArray[i]);
-        
-        
+    //     console.log(questionsArray[i]);    
     //     }
-        startQuiz()
+
+    else {
+        alert("Wrong Answer!")
+        correctAnswer = []
+        questionsOrder++
+    }
+    createQuestions();
+
 }
-
-
-    
-    
-
-
-
-// optionsBtns.addEventListener("click") {
-//     individualQuestions();
-// }
-
-
-
-
-
-
-
-
 
 var quizEnded = function(){
     quiz.remove();
@@ -181,55 +213,54 @@ var quizEnded = function(){
     
 };
 
-        var playerDetails = function(){
-            var playerName = prompt("The quiz has ended! Enter your name")
+var playerDetails = function(){
+    var playerName = prompt("The quiz has ended! Enter your name")
 
-            if(!playerName || playerName === "null"){
-                alert("You need to enter a name!");
-                playerDetails();
-            }
+    if(!playerName || playerName === "null"){
+        alert("You need to enter a name!");
+        playerDetails();
+    }
 
-        saveScore(playerName)
-        }
-
-        var saveScore = function(playerName) {
-            //create MAIN again for player name an high score
-            var scoreMain = document.createElement("main");
-            scoreMain.className = "main-style";
-
-            var scoreBox = document.createElement("div");
-            scoreBox.className = "questions-style";
-            scoreBox.innerHTML = "<h1>" + "High Scores" +  "</h1>";
-
-            var scoreName = document.createElement("div");
-            scoreName.className = "directions-style";
-            scoreName.innerHTML = "<h5>" + playerName +"</h5>";
-
-            scoreBox.appendChild(scoreName);
-            scoreMain.appendChild(scoreBox);
-            webPage.appendChild(scoreMain);
-        }
-
-
-
-var quizTimer = function(){
-
-   
-
-    setTimeout(quizEnded, 6000);
-    setTimeout(playerDetails, 6000);
-
-    var startCountdown = setInterval(quizTimer, 1000)
-
-
+saveScore(playerName)
 }
 
+var saveScore = function(playerName) {
+    //create MAIN again for player name an high score
+    var scoreMain = document.createElement("main");
+    scoreMain.className = "main-style";
 
+    var scoreBox = document.createElement("div");
+    scoreBox.className = "questions-style";
+    scoreBox.innerHTML = "<h1>" + "High Scores" +  "</h1>";
 
+    var scoreName = document.createElement("div");
+    scoreName.className = "directions-style";
+    scoreName.innerHTML = "<h5>" + playerName +"</h5>";
 
+    scoreBox.appendChild(scoreName);
+    scoreMain.appendChild(scoreBox);
+    webPage.appendChild(scoreMain);
+}
 
+var quizTimer = function(){
+    console.log(counter);
+    timer.innerHTML = "TIME REMAINING: " + counter;
+    counter --;
+     if(counter === 0){
+         clearInterval(startCountdown);
+         quizEnded();
+         playerDetails();
+     }
+    // setTimeout(quizEnded, 10000);
+    // setTimeout(playerDetails, 10000);
+}
+
+var counterFunc = function(){
+    startCountdown = setInterval(quizTimer, 1000)
+}
 
 
 startBtn.addEventListener("click",startQuiz);
 startBtn.addEventListener("click",quizTimer);
+startBtn.addEventListener("click",counterFunc);
 
