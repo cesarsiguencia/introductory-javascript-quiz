@@ -263,4 +263,3 @@ var counterFunc = function(){
 startBtn.addEventListener("click",startQuiz);
 startBtn.addEventListener("click",quizTimer);
 startBtn.addEventListener("click",counterFunc);
-
