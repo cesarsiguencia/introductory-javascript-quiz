@@ -57,6 +57,10 @@ h1 {
     display: none;
 }
 
+.directions-style {
+    text-align: center;
+}
+
 .controls-style {
     display: flex;
     justify-content: center;

@@ -8,6 +8,7 @@ var optionsBtns = document.getElementsByClassName("button-style");
 var footerBox = document.querySelector("footer");
 var counter = 30;
 var timer = ""
+var highScore = 0
 var startCountdown = [];
 var questionsArray = [
     {
@@ -117,6 +118,8 @@ var correctAnswer = true;
 // var wrongAnswer = [];
  
 
+
+
 var startQuiz = function(){
     // removing the directions div and the button 'Click Here to Start'. Function initiated by Start button click
     introductionDirections.remove();
@@ -135,16 +138,11 @@ var createQuestions = function(){
     // shuffles the questions
     individualQuestions(shuffledQuestions[questionsOrder]);
     // shuffles the answer choices
-    chooseAnswer(shuffledQuestions.answers[questionsOrder]);
+    // chooseAnswer(shuffledQuestions.answers[questionsOrder]);
 }
    
 var individualQuestions = function(question){
  
-    // for (var i=0; i < questionsArray.length; i++){
-    //     console.log(questionsArray[i]);
-    //     console.log(questionsArray[0]);
-    // }
-
     // creates div to place question in
     var quizQuestions = document.createElement("div");
     quizQuestions.className = "first-box-style";
@@ -169,41 +167,38 @@ var chooseAnswer = function(choices){
     var optionBtn1 = document.createElement("button");
     optionBtn1.className = "button-style";
     optionBtn1.innerHTML = choices.text;
-    optionBtn1.setAttribute("id","answer-buttons")
+    optionBtn1.setAttribute("answer-value", choices.correct)
     quizOptions.appendChild(optionBtn1);
     quizBox.appendChild(quizOptions);
    
-    optionBtn1.addEventListener("click", nextQuestion)
 
-    correctAnswer = choices.correct;
-    console.log(correctAnswer);
-    return correctAnswer;
-    // nextQuestion(quizOptions);
-    // question.answers.forEach(correctInfo =>{
-    // nextQuestion(correctInfo);
-    // })
+    optionBtn1.addEventListener("click", nextQuestion)
+    
+
+    
 }
 
-var nextQuestion = function(){
-    //IF USEER FINISHES ALL QUESTIONS, HOW DO I JUMP TO QUIZ END?
+var nextQuestion = function(event){
+    //IF USER FINISHES ALL QUESTIONS, HOW DO I JUMP TO QUIZ END?
+    var buttonClicked = event.target
+    console.log(buttonClicked);
+
+    var answerValue = buttonClicked.getAttribute("answer-value");
+    console.log(answerValue);
 
     if (correctAnswer === true){
-        alert("Correct answer!")
-        correctAnswer = [];
+        // alert("Correct answer!");
+    highScore = highScore + 10;
     questionsOrder++
+    
     }
-    // quizQuestions.remove();
-    // for (var i=0; i < questionsArray.length; i++){
-    //     console.log(questionsArray[i]);    
-    //     }
-
     else {
-        alert("Wrong Answer!")
+        // alert("Wrong Answer!")
         correctAnswer = []
         questionsOrder++
+        
     }
     createQuestions();
-
 }
 
 var quizEnded = function(){
@@ -214,14 +209,14 @@ var quizEnded = function(){
 };
 
 var playerDetails = function(){
-    var playerName = prompt("The quiz has ended! Enter your name")
+    // var playerName = prompt("The quiz has ended! Enter your name")
 
-    if(!playerName || playerName === "null"){
-        alert("You need to enter a name!");
-        playerDetails();
-    }
+    // if(!playerName || playerName === "null"){
+    //     // alert("You need to enter a name!");
+    //     playerDetails();
+    // }
 
-saveScore(playerName)
+    // saveScore(playerName)
 }
 
 var saveScore = function(playerName) {
@@ -235,24 +230,57 @@ var saveScore = function(playerName) {
 
     var scoreName = document.createElement("div");
     scoreName.className = "directions-style";
-    scoreName.innerHTML = "<h5>" + playerName +"</h5>";
+    scoreName.innerHTML = "<h3>" + playerName + "   :   " +highScore + "</h3>";
+
+    var playAgain = document.createElement("div");
+    playAgain.className="controls-style";
+    
+    var playAgainBtn = document.createElement("button");
+    playAgainBtn.className = "start-style";
+    playAgainBtn.innerHTML = "Play Again";
 
     scoreBox.appendChild(scoreName);
     scoreMain.appendChild(scoreBox);
+    playAgain.appendChild(playAgainBtn);
+    scoreMain.appendChild(playAgain);
     webPage.appendChild(scoreMain);
+
+   restartQuiz();
+   
+}
+
+var restartQuiz = function(){
+  
+    playAgainBtn.addEventListener("click");{
+        counter  = 30
+        highScore = 0
+        playAgain.remove();
+        startQuiz();
+
+        
+
+    }
+    playAgainBtn.addEventListener("click",quizTimer);
+    playAgainBtn.addEventListener("click",counterFunc);
+   
+
 }
 
 var quizTimer = function(){
-    console.log(counter);
+    // console.log(counter);
     timer.innerHTML = "TIME REMAINING: " + counter;
     counter --;
-     if(counter === 0){
-         clearInterval(startCountdown);
-         quizEnded();
-         playerDetails();
-     }
-    // setTimeout(quizEnded, 10000);
-    // setTimeout(playerDetails, 10000);
+
+    // if(!correctAnswer){
+    //     counter = counter - 5;
+    // }
+
+    if(counter === 0){
+        clearInterval(startCountdown);
+        quizEnded();
+        playerDetails();
+    }
+
 }
 
 var counterFunc = function(){
@@ -263,3 +291,10 @@ var counterFunc = function(){
 startBtn.addEventListener("click",startQuiz);
 startBtn.addEventListener("click",quizTimer);
 startBtn.addEventListener("click",counterFunc);
+
+
+//RIGHT AND WRONG VALUES ATTACHED TO BUTTON
+//DECREASE TIMER BY 5 POINTS EACH TIME A WRONG ANSWER IS SELECTED
+//save to local storage high scores so that I may play again
+
+

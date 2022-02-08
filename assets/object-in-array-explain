@@ -1,0 +1,24 @@
+var person = {
+    firstName: "Victor",
+    lastName: "Jacobs",
+    address: {
+        zip: 31232, 
+        city: "Main",
+        country: "US"
+    },
+    hobbies: [
+        {
+            hobbyName: "Painting",
+            skillLevel: 19
+        },
+        {
+            hobbyName: "Skiing",
+            skillLevel: 50,
+            history: ["1/1/10", "10/7/14"]
+        }
+    ]
+}
+
+person.address.zip;
+
+person.hobbies[1].history[1]
