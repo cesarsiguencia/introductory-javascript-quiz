@@ -4,7 +4,7 @@ var quizBox = document.querySelector("#quiz-container")
 var optionsBox = document.querySelector("#answers-box");
 var introductionDirections = document.querySelector("#introduction-box")
 var startBtn = document.querySelector("#start-button");
-var optionsBtns = document.getElementsByClassName("button-style");
+// var optionsBtns = document.getElementsByClassName("button-style");
 var footerBox = document.querySelector("footer");
 var counter = 30;
 var timer = ""
@@ -112,6 +112,7 @@ var questionsArray = [
     },
 ]
 
+var questionsOrder
 var shuffledQuestions = questionsArray.sort(() => Math.random() - .5);  //shuffles the questions with their appropriate answers
 var correctAnswer = true;
 // var wrongAnswer = [];
@@ -169,59 +170,93 @@ var chooseAnswer = function(answers){
     var optionBtn1 = document.createElement("button");
     optionBtn1.className = "button-style";
     optionBtn1.innerHTML = answers.answers[0].text;
-    optionBtn1.setAttribute("correct")
+    optionBtn1.setAttribute("answer-value", answers.answers[0].correct);
+    console.log(answers.answers[0].correct)
     quizOptions.appendChild(optionBtn1);
 
     var optionBtn2 = document.createElement("button");
     optionBtn2.className = "button-style";
     optionBtn2.innerHTML = answers.answers[1].text;
-
+    optionBtn2.setAttribute("answer-value", answers.answers[1].correct);
+    console.log(answers.answers[1].correct)
     quizOptions.appendChild(optionBtn2);
 
     var optionBtn3 = document.createElement("button");
     optionBtn3.className = "button-style";
     optionBtn3.innerHTML = answers.answers[2].text;
-
+    optionBtn3.setAttribute("answer-value", answers.answers[2].correct);
+    console.log(answers.answers[2].correct)
     quizOptions.appendChild(optionBtn3);
 
     var optionBtn4 = document.createElement("button");
     optionBtn4.className = "button-style";
     optionBtn4.innerHTML = answers.answers[3].text;
-
+    optionBtn4.setAttribute("answer-value", answers.answers[3].correct);
+    console.log(answers.answers[3].correct)
     quizOptions.appendChild(optionBtn4);
 
     quizBox.appendChild(quizOptions);
- 
-   
 
-    // optionBtn1.addEventListener("click", nextQuestion)
+    var value1 = answers.answers[0].correct;
+    var value2 = answers.answers[1].correct;
+    var value3 = answers.answers[2].correct;
+    var value4 = answers.answers[2].correct;
+ 
+    // optionBtn1.addEventListener("click", nextQuestion(value1))
+    // optionBtn2.addEventListener("click", nextQuestion(value2))
+    // optionBtn3.addEventListener("click", nextQuestion(value3))
+    // optionBtn4.addEventListener("click", nextQuestion(value4))
     
+    optionBtn1.onclick = function () {
+        nextQuestion(value1);
+    }
+    optionBtn2.onclick = function () {
+        nextQuestion(value2);
+    }
+    optionBtn3.onclick = function () {
+        nextQuestion(value3);
+    }
+    optionBtn4.onclick = function () {
+        nextQuestion(value4);
+    }
 
     
 }
 
-// var nextQuestion = function(event){
-//     //IF USER FINISHES ALL QUESTIONS, HOW DO I JUMP TO QUIZ END?
-//     var buttonClicked = event.target
-//     console.log(buttonClicked);
+var nextQuestion = function(rightorwrong){
+    //IF USER FINISHES ALL QUESTIONS, HOW DO I JUMP TO QUIZ END?
+    // var buttonClicked = event.target
+    // console.log(buttonClicked);
+    console.log(rightorwrong)
 
-//     var answerValue = buttonClicked.getAttribute("answer-value");
-//     console.log(answerValue);
-
-//     if (correctAnswer === true){
-//         // alert("Correct answer!");
-//     highScore = highScore + 10;
-//     questionsOrder++
+    if (rightorwrong === false){
+        alert("Wrong Answer! 5 seconds deducted from timer")
+        counter = counter - 5;
+    } else {
+        alert("Right Answer!")
+        questionsArray++
+        generateQuestions();
+    }
     
-//     }
-//     else {
-//         // alert("Wrong Answer!")
-//         correctAnswer = []
-//         questionsOrder++
+    
+
+
+    // var answerValue = buttonClicked.getAttribute("answer-value");
+    // console.log(answerValue);
+
+    // if (correctAnswer === true){
+    //     // alert("Correct answer!");
+    // highScore = highScore + 10;
+    // questionsOrder++
+    
+    // }
+    // else {
+    //     // alert("Wrong Answer!")
+    //     correctAnswer = []
+    //     questionsOrder++
         
-//     }
-//     createQuestions();
-// }
+    // }
+}
 
 var quizEnded = function(){
     quiz.remove();
@@ -269,6 +304,7 @@ var saveScore = function(playerName) {
 
    restartQuiz();
    
+
 }
 
 var restartQuiz = function(){
@@ -294,7 +330,7 @@ var quizTimer = function(){
     counter --;
 
     // if(!correctAnswer){
-    //     counter = counter - 5;
+    //     
     // }
 
     if(counter === 0){
