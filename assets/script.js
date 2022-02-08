@@ -109,17 +109,10 @@ var questionsArray = [
         {text: ' The ! will add a numeric value to the variable ', correct: false},
         {text: ' The ! will create a new variable with the same name ', correct: false},
         ]
-    },
-]
+    }
+];
 
-var questionsOrder
-var shuffledQuestions = questionsArray.sort(() => Math.random() - .5);  //shuffles the questions with their appropriate answers
-var correctAnswer = true;
-// var wrongAnswer = [];
-
-console.log(shuffledQuestions)
- 
-
+var shuffledQuestions = ""
 
 
 var startQuiz = function(){
@@ -139,15 +132,22 @@ var generateQuestions = function(){
 // adding functions for prompts and options to show
     // shuffles the questions
 
-
+console.log("this function is going through")
     for (var i = 0; i < questionsArray.length; i++){
-        var pickedQuestion = questionsArray[i]
-        console.log(pickedQuestion)
-    }
+        shuffledQuestions = questionsArray.sort(() => Math.random() - .5);  //shuffles the questions with their appropriate answers
+        //WHY IS THIS WORKING??????
+        var pickedQuestion = questionsArray[i];
+        console.log(pickedQuestion);
+        individualQuestions(pickedQuestion);
+        chooseAnswer(pickedQuestion);
 
-    individualQuestions(pickedQuestion);
-    chooseAnswer(pickedQuestion);
+        if (pickedQuestion = questionsArray.length - 1){
+            quizEnded;
+        }
+    }
 }
+
+
    
 var individualQuestions = function(question){
  
@@ -219,43 +219,29 @@ var chooseAnswer = function(answers){
     optionBtn4.onclick = function () {
         nextQuestion(value4);
     }
-
-    
 }
 
 var nextQuestion = function(rightorwrong){
     //IF USER FINISHES ALL QUESTIONS, HOW DO I JUMP TO QUIZ END?
-    // var buttonClicked = event.target
-    // console.log(buttonClicked);
+
     console.log(rightorwrong)
 
     if (rightorwrong === false){
         alert("Wrong Answer! 5 seconds deducted from timer")
         counter = counter - 5;
     } else {
-        alert("Right Answer!")
-        questionsArray++
+        console.log("correct answer")
+        alert("Right Answer!");
+        // quizQuestions.remove();
+        // quizOptions.remove();
+        // optionBtn1.remove();
+        // optionBtn2.remove();
+        // optionBtn3.remove();
+        // optionBtn4.remove();
         generateQuestions();
+
     }
-    
-    
 
-
-    // var answerValue = buttonClicked.getAttribute("answer-value");
-    // console.log(answerValue);
-
-    // if (correctAnswer === true){
-    //     // alert("Correct answer!");
-    // highScore = highScore + 10;
-    // questionsOrder++
-    
-    // }
-    // else {
-    //     // alert("Wrong Answer!")
-    //     correctAnswer = []
-    //     questionsOrder++
-        
-    // }
 }
 
 var quizEnded = function(){
