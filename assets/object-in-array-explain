@@ -21,4 +21,15 @@ var person = {
 
 person.address.zip;
 
-person.hobbies[1].history[1]
+person.hobbies[1].history[1] = 10/7/14
+
+var questionsArray = [
+    {
+    question: 'What is the JavaScript command to add a message to the DevTools browser that does not appear on the site ?',
+    answers: [
+        {text: 'console.log', correct: true},
+        {text: 'message.log', correct: false},
+        {text: 'querySelector', correct: false},
+        {text: 'event.target', correct: false},
+        ]
+    },

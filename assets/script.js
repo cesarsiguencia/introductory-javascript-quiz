@@ -112,10 +112,11 @@ var questionsArray = [
     },
 ]
 
-var questionsOrder = 0
 var shuffledQuestions = questionsArray.sort(() => Math.random() - .5);  //shuffles the questions with their appropriate answers
 var correctAnswer = true;
 // var wrongAnswer = [];
+
+console.log(shuffledQuestions)
  
 
 
@@ -130,15 +131,21 @@ var startQuiz = function(){
     timer.className = "footer-style";
     footerBox.appendChild(timer);
 
-    createQuestions();
+    generateQuestions();
 }
 
-var createQuestions = function(){
+var generateQuestions = function(){
 // adding functions for prompts and options to show
     // shuffles the questions
-    individualQuestions(shuffledQuestions[questionsOrder]);
-    // shuffles the answer choices
-    // chooseAnswer(shuffledQuestions.answers[questionsOrder]);
+
+
+    for (var i = 0; i < questionsArray.length; i++){
+        var pickedQuestion = questionsArray[i]
+        console.log(pickedQuestion)
+    }
+
+    individualQuestions(pickedQuestion);
+    chooseAnswer(pickedQuestion);
 }
    
 var individualQuestions = function(question){
@@ -150,14 +157,9 @@ var individualQuestions = function(question){
     quizQuestions.innerHTML = "<h2 class='first-text-style'>" + question.question + "</H2>";
     quizBox.appendChild(quizQuestions);
 
-    // takes the answers array object and pushes it as 'answer'
-    question.answers.forEach(choices =>{
-    chooseAnswer(choices);
-    })
-
 }
 
-var chooseAnswer = function(choices){
+var chooseAnswer = function(answers){
 
     //creates div to place answer buttons in
     var quizOptions = document.createElement("div");
@@ -166,40 +168,60 @@ var chooseAnswer = function(choices){
     // create buttons to press
     var optionBtn1 = document.createElement("button");
     optionBtn1.className = "button-style";
-    optionBtn1.innerHTML = choices.text;
-    optionBtn1.setAttribute("answer-value", choices.correct)
+    optionBtn1.innerHTML = answers.answers[0].text;
+    optionBtn1.setAttribute("correct")
     quizOptions.appendChild(optionBtn1);
+
+    var optionBtn2 = document.createElement("button");
+    optionBtn2.className = "button-style";
+    optionBtn2.innerHTML = answers.answers[1].text;
+
+    quizOptions.appendChild(optionBtn2);
+
+    var optionBtn3 = document.createElement("button");
+    optionBtn3.className = "button-style";
+    optionBtn3.innerHTML = answers.answers[2].text;
+
+    quizOptions.appendChild(optionBtn3);
+
+    var optionBtn4 = document.createElement("button");
+    optionBtn4.className = "button-style";
+    optionBtn4.innerHTML = answers.answers[3].text;
+
+    quizOptions.appendChild(optionBtn4);
+
     quizBox.appendChild(quizOptions);
+ 
    
 
-    optionBtn1.addEventListener("click", nextQuestion)
+    // optionBtn1.addEventListener("click", nextQuestion)
     
 
     
 }
 
-var nextQuestion = function(event){
-    //IF USER FINISHES ALL QUESTIONS, HOW DO I JUMP TO QUIZ END?
-    var buttonClicked = event.target
-    console.log(buttonClicked);
+// var nextQuestion = function(event){
+//     //IF USER FINISHES ALL QUESTIONS, HOW DO I JUMP TO QUIZ END?
+//     var buttonClicked = event.target
+//     console.log(buttonClicked);
 
-    var answerValue = buttonClicked.getAttribute("answer-value");
-    console.log(answerValue);
+//     var answerValue = buttonClicked.getAttribute("answer-value");
+//     console.log(answerValue);
 
-    if (correctAnswer === true){
-        // alert("Correct answer!");
-    highScore = highScore + 10;
-    questionsOrder++
+//     if (correctAnswer === true){
+//         // alert("Correct answer!");
+//     highScore = highScore + 10;
+//     questionsOrder++
     
-    }
-    else {
-        // alert("Wrong Answer!")
-        correctAnswer = []
-        questionsOrder++
+//     }
+//     else {
+//         // alert("Wrong Answer!")
+//         correctAnswer = []
+//         questionsOrder++
         
-    }
-    createQuestions();
-}
+//     }
+//     createQuestions();
+// }
 
 var quizEnded = function(){
     quiz.remove();
