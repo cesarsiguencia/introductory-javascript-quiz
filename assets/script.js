@@ -3,12 +3,12 @@ var quiz = document.querySelector("main");
 var quizBox = document.querySelector("#quiz-container")
 var optionsBox = document.querySelector("#answers-box");
 var introductionDirections = document.querySelector("#introduction-box")
+var playerName = ''
 var startBtn = document.querySelector("#start-button");
-// var optionsBtns = document.getElementsByClassName("button-style");
 var footerBox = document.querySelector("footer");
 var counter = 30;
 var timer = ""
-var highScore = 0
+var highScore = ''
 var startCountdown = [];
 var questionsArray = [
     {
@@ -113,9 +113,12 @@ var questionsArray = [
 ];
 
 var shuffledQuestions = ""
+var playAgainBtn = ""
 
 
 var startQuiz = function(){
+    playerName = document.querySelector("input[name='player-name']").value;
+    highScore = 0
     // removing the directions div and the button 'Click Here to Start'. Function initiated by Start button click
     introductionDirections.remove();
     startBtn.remove();
@@ -129,13 +132,10 @@ var startQuiz = function(){
 }
 
 var generateQuestions = function(){
-// adding functions for prompts and options to show
-    // shuffles the questions
 
-console.log("this function is going through")
+    console.log("this function is going through")
     for (var i = 0; i < questionsArray.length; i++){
-        shuffledQuestions = questionsArray.sort(() => Math.random() - .5);  //shuffles the questions with their appropriate answers
-        //WHY IS THIS WORKING??????
+        shuffledQuestions = questionsArray.sort(() => Math.random() - .5);  //shuffles the questions 
         var pickedQuestion = questionsArray[i];
         console.log(pickedQuestion);
         individualQuestions(pickedQuestion);
@@ -150,18 +150,15 @@ console.log("this function is going through")
 
    
 var individualQuestions = function(question){
- 
     // creates div to place question in
     var quizQuestions = document.createElement("div");
     quizQuestions.className = "first-box-style";
     quizBox.innerHTML =""
     quizQuestions.innerHTML = "<h2 class='first-text-style'>" + question.question + "</H2>";
     quizBox.appendChild(quizQuestions);
-
 }
 
 var chooseAnswer = function(answers){
-
     //creates div to place answer buttons in
     var quizOptions = document.createElement("div");
     quizOptions.className = "answers-style";
@@ -201,11 +198,6 @@ var chooseAnswer = function(answers){
     var value2 = answers.answers[1].correct;
     var value3 = answers.answers[2].correct;
     var value4 = answers.answers[2].correct;
- 
-    // optionBtn1.addEventListener("click", nextQuestion(value1))
-    // optionBtn2.addEventListener("click", nextQuestion(value2))
-    // optionBtn3.addEventListener("click", nextQuestion(value3))
-    // optionBtn4.addEventListener("click", nextQuestion(value4))
     
     optionBtn1.onclick = function () {
         nextQuestion(value1);
@@ -232,6 +224,7 @@ var nextQuestion = function(rightorwrong){
     } else {
         console.log("correct answer")
         alert("Right Answer!");
+        highScore++
         // quizQuestions.remove();
         // quizOptions.remove();
         // optionBtn1.remove();
@@ -247,23 +240,13 @@ var nextQuestion = function(rightorwrong){
 var quizEnded = function(){
     quiz.remove();
     footerBox.remove();
-    console.log("This should disappear in 6 seconds");
+    saveScore();
     
 };
 
-var playerDetails = function(){
-    // var playerName = prompt("The quiz has ended! Enter your name")
+var saveScore = function() {
 
-    // if(!playerName || playerName === "null"){
-    //     // alert("You need to enter a name!");
-    //     playerDetails();
-    // }
-
-    // saveScore(playerName)
-}
-
-var saveScore = function(playerName) {
-    //create MAIN again for player name an high score
+    console.log(playerName)
     var scoreMain = document.createElement("main");
     scoreMain.className = "main-style";
 
@@ -278,7 +261,7 @@ var saveScore = function(playerName) {
     var playAgain = document.createElement("div");
     playAgain.className="controls-style";
     
-    var playAgainBtn = document.createElement("button");
+    playAgainBtn = document.createElement("button");
     playAgainBtn.className = "start-style";
     playAgainBtn.innerHTML = "Play Again";
 
@@ -288,49 +271,24 @@ var saveScore = function(playerName) {
     scoreMain.appendChild(playAgain);
     webPage.appendChild(scoreMain);
 
-   restartQuiz();
-   
-
-}
-
-var restartQuiz = function(){
-  
-    playAgainBtn.addEventListener("click");{
-        counter  = 30
-        highScore = 0
-        playAgain.remove();
-        startQuiz();
-
-        
-
-    }
-    playAgainBtn.addEventListener("click",quizTimer);
-    playAgainBtn.addEventListener("click",counterFunc);
-   
-
+    playAgainBtn.onclick = function () {
+        window.location.reload()
+   }
 }
 
 var quizTimer = function(){
-    // console.log(counter);
     timer.innerHTML = "TIME REMAINING: " + counter;
     counter --;
 
-    // if(!correctAnswer){
-    //     
-    // }
-
-    if(counter === 0){
+    if(counter <= 0){
         clearInterval(startCountdown);
         quizEnded();
-        playerDetails();
     }
-
 }
 
 var counterFunc = function(){
     startCountdown = setInterval(quizTimer, 1000)
 }
-
 
 startBtn.addEventListener("click",startQuiz);
 startBtn.addEventListener("click",quizTimer);
