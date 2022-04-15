@@ -3,12 +3,15 @@ var quiz = document.querySelector("main");
 var quizBox = document.querySelector("#quiz-container")
 var optionsBox = document.querySelector("#answers-box");
 var introductionDirections = document.querySelector("#introduction-box")
-var playerName = ''
+var playerStats = {
+    name: '',
+    highScore: ''
+}
+var scoreTable = []
 var startBtn = document.querySelector("#start-button");
 var footerBox = document.querySelector("footer");
 var counter = 30;
 var timer = ""
-var highScore = ''
 var startCountdown = [];
 var questionsArray = [
     {
@@ -117,8 +120,10 @@ var playAgainBtn = ""
 
 
 var startQuiz = function(){
-    playerName = document.querySelector("input[name='player-name']").value;
-    highScore = 0
+
+    playerStats.name = document.querySelector("input[name='player-name']").value;
+    playerStats.highScore = 0
+
     // removing the directions div and the button 'Click Here to Start'. Function initiated by Start button click
     introductionDirections.remove();
     startBtn.remove();
@@ -224,7 +229,7 @@ var nextQuestion = function(rightorwrong){
     } else {
         console.log("correct answer")
         alert("Right Answer!");
-        highScore++
+        playerStats.highScore++
         // quizQuestions.remove();
         // quizOptions.remove();
         // optionBtn1.remove();
@@ -232,21 +237,35 @@ var nextQuestion = function(rightorwrong){
         // optionBtn3.remove();
         // optionBtn4.remove();
         generateQuestions();
-
     }
-
 }
 
 var quizEnded = function(){
+    scoreTable.push(playerStats)
+    
     quiz.remove();
     footerBox.remove();
+    storeScores();
     saveScore();
     
 };
 
+var storeScores = function(){
+    localStorage.setItem("player-stuff", JSON.stringify(scoreTable))
+}
+
 var saveScore = function() {
 
-    console.log(playerName)
+    console.log(scoreTable)
+    
+    var quizNames = localStorage.getItem('player-stuff')
+
+    console.log(quizNames)
+
+    // if(quizNames = null){
+    //     quizNames = localStorage.setItem("player-stuff", JSON.stringify(scoreTable))
+    // }
+
     var scoreMain = document.createElement("main");
     scoreMain.className = "main-style";
 
@@ -256,7 +275,11 @@ var saveScore = function() {
 
     var scoreName = document.createElement("div");
     scoreName.className = "directions-style";
-    scoreName.innerHTML = "<h3>" + playerName + "   :   " +highScore + "</h3>";
+    
+    for (var i = 0; i < quizNames.length; i++){
+        scoreName.innerHTML = "<h3>" + quizNames[i].name + "   :   " + quizNames[i].highScore + "</h3>";
+    }
+    
 
     var playAgain = document.createElement("div");
     playAgain.className="controls-style";
@@ -270,7 +293,7 @@ var saveScore = function() {
     playAgain.appendChild(playAgainBtn);
     scoreMain.appendChild(playAgain);
     webPage.appendChild(scoreMain);
-
+    
     playAgainBtn.onclick = function () {
         window.location.reload()
    }
@@ -295,8 +318,5 @@ startBtn.addEventListener("click",quizTimer);
 startBtn.addEventListener("click",counterFunc);
 
 
-//RIGHT AND WRONG VALUES ATTACHED TO BUTTON
-//DECREASE TIMER BY 5 POINTS EACH TIME A WRONG ANSWER IS SELECTED
-//save to local storage high scores so that I may play again
 
 
