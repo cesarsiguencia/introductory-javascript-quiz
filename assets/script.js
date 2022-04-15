@@ -283,14 +283,25 @@ var saveScore = function() {
     playAgainBtn.className = "start-style";
     playAgainBtn.innerHTML = "Play Again";
 
+    resetScoresBtn = document.createElement("button");
+    resetScoresBtn.className = "start-style";
+    resetScoresBtn.innerHTML = "Reset High Scores";
+
     
     scoreMain.appendChild(scoreBox);
     playAgain.appendChild(playAgainBtn);
+    playAgain.appendChild(resetScoresBtn);
     scoreMain.appendChild(playAgain);
     webPage.appendChild(scoreMain);
     
     playAgainBtn.onclick = function () {
         window.location.reload()
+   }
+
+   resetScoresBtn.onclick = function (){
+       localStorage.clear();
+       scoreBox.remove();
+       resetScoresBtn.remove();
    }
 }
 
