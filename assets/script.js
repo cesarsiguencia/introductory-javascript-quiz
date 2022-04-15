@@ -3,11 +3,12 @@ var quiz = document.querySelector("main");
 var quizBox = document.querySelector("#quiz-container")
 var optionsBox = document.querySelector("#answers-box");
 var introductionDirections = document.querySelector("#introduction-box")
+var scoreTable = []
 var playerStats = {
     name: '',
     highScore: ''
 }
-var scoreTable = []
+
 var startBtn = document.querySelector("#start-button");
 var footerBox = document.querySelector("footer");
 var counter = 30;
@@ -79,8 +80,8 @@ var questionsArray = [
     answers: [
         {text: ' == ', correct: false},
         {text: ' || ', correct: false},
+        {text: ' && ', correct: true },
         {text: ' [] ', correct: false},
-        {text: ' && ', correct: true},
         ]
     },
 
@@ -120,10 +121,12 @@ var playAgainBtn = ""
 
 
 var startQuiz = function(){
+    
 
     playerStats.name = document.querySelector("input[name='player-name']").value;
     playerStats.highScore = 0
-
+    
+    
     // removing the directions div and the button 'Click Here to Start'. Function initiated by Start button click
     introductionDirections.remove();
     startBtn.remove();
@@ -257,14 +260,6 @@ var storeScores = function(){
 var saveScore = function() {
 
     console.log(scoreTable)
-    
-    var quizNames = localStorage.getItem('player-stuff')
-
-    console.log(quizNames)
-
-    // if(quizNames = null){
-    //     quizNames = localStorage.setItem("player-stuff", JSON.stringify(scoreTable))
-    // }
 
     var scoreMain = document.createElement("main");
     scoreMain.className = "main-style";
@@ -273,11 +268,11 @@ var saveScore = function() {
     scoreBox.className = "questions-style";
     scoreBox.innerHTML = "<h1>" + "High Scores" +  "</h1>";
 
-    var scoreName = document.createElement("div");
-    scoreName.className = "directions-style";
-    
-    for (var i = 0; i < quizNames.length; i++){
-        scoreName.innerHTML = "<h3>" + quizNames[i].name + "   :   " + quizNames[i].highScore + "</h3>";
+    for (var i = 0; i < scoreTable.length; i++){
+        var scoreName = document.createElement("div");
+        scoreName.className = "directions-style";
+        scoreName.innerHTML = "<h3>" + scoreTable[i].name + "   :   " + scoreTable[i].highScore + "</h3>";
+        scoreBox.appendChild(scoreName);
     }
     
 
@@ -288,7 +283,7 @@ var saveScore = function() {
     playAgainBtn.className = "start-style";
     playAgainBtn.innerHTML = "Play Again";
 
-    scoreBox.appendChild(scoreName);
+    
     scoreMain.appendChild(scoreBox);
     playAgain.appendChild(playAgainBtn);
     scoreMain.appendChild(playAgain);
@@ -300,11 +295,12 @@ var saveScore = function() {
 }
 
 var quizTimer = function(){
+   
     timer.innerHTML = "TIME REMAINING: " + counter;
     counter --;
 
     if(counter <= 0){
-        clearInterval(startCountdown);
+        clearInterval(startCountdown); //this stops the timer
         quizEnded();
     }
 }
@@ -313,10 +309,25 @@ var counterFunc = function(){
     startCountdown = setInterval(quizTimer, 1000)
 }
 
+var loadTasks = function(){
+    var savedTasks = localStorage.getItem("player-stuff");
+  
+    if (!savedTasks){
+      return false;
+    }
+    console.log(savedTasks)
+    savedTasks = JSON.parse(savedTasks);
+    console.log(savedTasks)
+    scoreTable = savedTasks
+
+}
+
+loadTasks()
+
+
 startBtn.addEventListener("click",startQuiz);
 startBtn.addEventListener("click",quizTimer);
 startBtn.addEventListener("click",counterFunc);
-
 
 
 
