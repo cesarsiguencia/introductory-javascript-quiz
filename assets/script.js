@@ -120,10 +120,16 @@ var shuffledQuestions = ""
 var playAgainBtn = ""
 
 
+
 var startQuiz = function(){
     
-
     playerStats.name = document.querySelector("input[name='player-name']").value;
+
+    if(!playerStats.name){
+        alert("You must enter a name!")
+        return
+    }
+
     playerStats.highScore = 0
     
     
@@ -136,16 +142,16 @@ var startQuiz = function(){
     timer.className = "footer-style";
     footerBox.appendChild(timer);
 
+    quizTimer();
+    counterFunc();
     generateQuestions();
 }
 
 var generateQuestions = function(){
 
-    console.log("this function is going through")
     for (var i = 0; i < questionsArray.length; i++){
         shuffledQuestions = questionsArray.sort(() => Math.random() - .5);  //shuffles the questions 
         var pickedQuestion = questionsArray[i];
-        console.log(pickedQuestion);
         individualQuestions(pickedQuestion);
         chooseAnswer(pickedQuestion);
 
@@ -154,8 +160,6 @@ var generateQuestions = function(){
         }
     }
 }
-
-
    
 var individualQuestions = function(question){
     // creates div to place question in
@@ -172,32 +176,30 @@ var chooseAnswer = function(answers){
     quizOptions.className = "answers-style";
 
     // create buttons to press
+
     var optionBtn1 = document.createElement("button");
     optionBtn1.className = "button-style";
     optionBtn1.innerHTML = answers.answers[0].text;
     optionBtn1.setAttribute("answer-value", answers.answers[0].correct);
-    console.log(answers.answers[0].correct)
+ 
     quizOptions.appendChild(optionBtn1);
 
     var optionBtn2 = document.createElement("button");
     optionBtn2.className = "button-style";
     optionBtn2.innerHTML = answers.answers[1].text;
     optionBtn2.setAttribute("answer-value", answers.answers[1].correct);
-    console.log(answers.answers[1].correct)
     quizOptions.appendChild(optionBtn2);
 
     var optionBtn3 = document.createElement("button");
     optionBtn3.className = "button-style";
     optionBtn3.innerHTML = answers.answers[2].text;
     optionBtn3.setAttribute("answer-value", answers.answers[2].correct);
-    console.log(answers.answers[2].correct)
     quizOptions.appendChild(optionBtn3);
 
     var optionBtn4 = document.createElement("button");
     optionBtn4.className = "button-style";
     optionBtn4.innerHTML = answers.answers[3].text;
     optionBtn4.setAttribute("answer-value", answers.answers[3].correct);
-    console.log(answers.answers[3].correct)
     quizOptions.appendChild(optionBtn4);
 
     quizBox.appendChild(quizOptions);
@@ -224,21 +226,12 @@ var chooseAnswer = function(answers){
 var nextQuestion = function(rightorwrong){
     //IF USER FINISHES ALL QUESTIONS, HOW DO I JUMP TO QUIZ END?
 
-    console.log(rightorwrong)
-
     if (rightorwrong === false){
         alert("Wrong Answer! 5 seconds deducted from timer")
         counter = counter - 5;
     } else {
-        console.log("correct answer")
         alert("Right Answer!");
         playerStats.highScore++
-        // quizQuestions.remove();
-        // quizOptions.remove();
-        // optionBtn1.remove();
-        // optionBtn2.remove();
-        // optionBtn3.remove();
-        // optionBtn4.remove();
         generateQuestions();
     }
 }
@@ -258,8 +251,6 @@ var storeScores = function(){
 }
 
 var saveScore = function() {
-
-    console.log(scoreTable)
 
     var scoreMain = document.createElement("main");
     scoreMain.className = "main-style";
@@ -296,13 +287,21 @@ var saveScore = function() {
     
     playAgainBtn.onclick = function () {
         window.location.reload()
-   }
+    }
 
-   resetScoresBtn.onclick = function (){
+    resetScoresBtn.onclick = function (){
        localStorage.clear();
-       scoreBox.remove();
+       scoreName.remove();
+       playAgainBtn.remove();
        resetScoresBtn.remove();
-   }
+
+       var noScoresTitle = document.createElement("div");
+       noScoresTitle.className = "directions-style";
+       noScoresTitle.innerHTML = "<h3>" + "No high scores saved" +  "</h3>";
+
+       scoreBox.appendChild(noScoresTitle)
+       playAgain.appendChild(playAgainBtn)
+    }
 }
 
 var quizTimer = function(){
@@ -320,25 +319,18 @@ var counterFunc = function(){
     startCountdown = setInterval(quizTimer, 1000)
 }
 
-var loadTasks = function(){
-    var savedTasks = localStorage.getItem("player-stuff");
+var loadScores = function(){
+    var savedScores = localStorage.getItem("player-stuff");
   
-    if (!savedTasks){
+    if (!savedScores){
       return false;
     }
-    console.log(savedTasks)
-    savedTasks = JSON.parse(savedTasks);
-    console.log(savedTasks)
-    scoreTable = savedTasks
+
+    savedScores = JSON.parse(savedScores);
+    scoreTable = savedScores
 
 }
 
-loadTasks()
-
+loadScores()
 
 startBtn.addEventListener("click",startQuiz);
-startBtn.addEventListener("click",quizTimer);
-startBtn.addEventListener("click",counterFunc);
-
-
-
