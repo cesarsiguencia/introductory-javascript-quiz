@@ -144,20 +144,28 @@ var startQuiz = function(){
 
     quizTimer();
     counterFunc();
+    shuffle();
+}
+
+var shuffle = function(){
+    shuffledQuestions = questionsArray.sort(() => Math.random() - .5);  //shuffles the questions 
+    questionsArray = shuffledQuestions
     generateQuestions();
 }
+
+
 
 var generateQuestions = function(){
 
     for (var i = 0; i < questionsArray.length; i++){
-        shuffledQuestions = questionsArray.sort(() => Math.random() - .5);  //shuffles the questions 
         var pickedQuestion = questionsArray[i];
-        individualQuestions(pickedQuestion);
-        chooseAnswer(pickedQuestion);
 
         if (pickedQuestion = questionsArray.length - 1){
-            quizEnded;
+            quizEnded();
         }
+
+        console.log(pickedQuestion)
+        individualQuestions(pickedQuestion);
     }
 }
    
@@ -167,48 +175,62 @@ var individualQuestions = function(question){
     quizQuestions.className = "first-box-style";
     quizBox.innerHTML =""
     quizQuestions.innerHTML = "<h2 class='first-text-style'>" + question.question + "</H2>";
+    console.log(question.question)
     quizBox.appendChild(quizQuestions);
-}
 
-var chooseAnswer = function(answers){
     //creates div to place answer buttons in
     var quizOptions = document.createElement("div");
     quizOptions.className = "answers-style";
+    console.log(question.answers)
+    // // create buttons to press
+    // for (var i = 0; i < answers.answers.length; i++){
+    //     var optionBtn = document.createElement("button");
+    //     optionBtn.className = "button-style";
+    //     optionBtn.innerHTML = answers.answers[i].text;
+    //     // optionBtn.setAttribute("answer-value", answers.answers[i].correct);
+    //     // console.log(answers.answers[i].correct)
 
+    //     // var answerValue = answers.answers[i].correct;
+    //     // console.log(answerValue)
+
+    //     quizOptions.appendChild(optionBtn);
+    // }
     // create buttons to press
 
     var optionBtn1 = document.createElement("button");
     optionBtn1.className = "button-style";
-    optionBtn1.innerHTML = answers.answers[0].text;
-    optionBtn1.setAttribute("answer-value", answers.answers[0].correct);
+    optionBtn1.innerHTML = question.answers[0].text;
+    optionBtn1.setAttribute("answer-value", question.answers[0].correct);
  
     quizOptions.appendChild(optionBtn1);
 
     var optionBtn2 = document.createElement("button");
     optionBtn2.className = "button-style";
-    optionBtn2.innerHTML = answers.answers[1].text;
-    optionBtn2.setAttribute("answer-value", answers.answers[1].correct);
+    optionBtn2.innerHTML = question.answers[1].text;
+    optionBtn2.setAttribute("answer-value", question.answers[1].correct);
     quizOptions.appendChild(optionBtn2);
 
     var optionBtn3 = document.createElement("button");
     optionBtn3.className = "button-style";
-    optionBtn3.innerHTML = answers.answers[2].text;
-    optionBtn3.setAttribute("answer-value", answers.answers[2].correct);
+    optionBtn3.innerHTML = question.answers[2].text;
+    optionBtn3.setAttribute("answer-value", question.answers[2].correct);
     quizOptions.appendChild(optionBtn3);
 
     var optionBtn4 = document.createElement("button");
     optionBtn4.className = "button-style";
-    optionBtn4.innerHTML = answers.answers[3].text;
-    optionBtn4.setAttribute("answer-value", answers.answers[3].correct);
+    optionBtn4.innerHTML = question.answers[3].text;
+    optionBtn4.setAttribute("answer-value", question.answers[3].correct);
     quizOptions.appendChild(optionBtn4);
 
     quizBox.appendChild(quizOptions);
 
-    var value1 = answers.answers[0].correct;
-    var value2 = answers.answers[1].correct;
-    var value3 = answers.answers[2].correct;
-    var value4 = answers.answers[2].correct;
-    
+    var value1 = question.answers[0].correct;
+    var value2 = question.answers[1].correct;
+    var value3 = question.answers[2].correct;
+    var value4 = question.answers[3].correct;
+    // var answerValue = answers.target.getAttribute("answer-value")
+    // var answerValue = answers.answers
+    // console.log(answerValue)
     optionBtn1.onclick = function () {
         nextQuestion(value1);
     }
@@ -221,6 +243,7 @@ var chooseAnswer = function(answers){
     optionBtn4.onclick = function () {
         nextQuestion(value4);
     }
+
 }
 
 var nextQuestion = function(rightorwrong){
