@@ -11,7 +11,7 @@ var playerStats = {
 
 var startBtn = document.querySelector("#start-button");
 var footerBox = document.querySelector("footer");
-var counter = 500;
+var counter = 60;
 var timer = ""
 var startCountdown = [];
 var questionsArray = [
@@ -116,8 +116,7 @@ var questionsArray = [
     }
 ];
 
-var playAgainBtn = ""
-
+var questionsCounter = 0
 
 
 var startQuiz = function(){
@@ -128,9 +127,7 @@ var startQuiz = function(){
         alert("You must enter a name!")
         return
     }
-
     playerStats.highScore = 0
-    
     
     // removing the directions div and the button 'Click Here to Start'. Function initiated by Start button click
     introductionDirections.remove();
@@ -141,42 +138,46 @@ var startQuiz = function(){
     timer.className = "footer-style";
     footerBox.appendChild(timer);
 
-
-
-
     quizTimer();
     counterFunc();
     shuffleAndRenderQuestions();
 }
 
 var shuffleAndRenderQuestions = function(){
-    //=====================================================================//
-
     var shuffledQuestions = questionsArray.sort(() => Math.random() - .5);  //shuffles the questions 
     questionsArray = shuffledQuestions
-    console.log(questionsArray)
     generateQuestions()
-    //=====================================================================//
 }
 
 var generateQuestions = function(){
 
-    // var pickedQuestionWithChoices = ''
-    for (var i = 0; i < questionsArray.length; i++){
-        var pickedQuestionWithChoices = questionsArray[i];
+    // for (var i = 0; i < questionsArray.length; i++){
+    //     pickedQuestionWithChoices = questionsArray[i];
 
-        // if (pickedQuestion = questionsArray.length - 1){
-        //     quizEnded();
-        // }
-        generateQuestionsHTML(pickedQuestionWithChoices.question);
-        generateAnswerHTML(pickedQuestionWithChoices.answers);
-        // return
+    //     // if (pickedQuestion = questionsArray.length - 1){
+    //     //     quizEnded();
+    //     // }
+
+    //     // return
+    // }
+    // THIS LOOP DID NOT WORK, GENERATED THE VERY LAST QUESTION IN ARRAY, THUS COULD NOT CONTINUE
+
+    var pickedQuestionWithChoices = ''
+
+    if(questionsCounter === 0){
+        pickedQuestionWithChoices = questionsArray[0]
+        questionsCounter = 1
+    } else if (questionsCounter === 10){
+        quizEnded()
+        return
+    } else {
+        pickedQuestionWithChoices = questionsArray[questionsCounter]
+        questionsCounter++
     }
+    generateQuestionsHTML(pickedQuestionWithChoices.question);
+    generateAnswerHTML(pickedQuestionWithChoices.answers);
 }
 
-
-
-   
 var generateQuestionsHTML = function(question){
     // creates div to place question in
     var quizQuestions = document.createElement("div");
@@ -184,14 +185,10 @@ var generateQuestionsHTML = function(question){
     quizBox.innerHTML =""
     quizQuestions.innerHTML = "<h2 class='first-text-style'>" + question + "</H2>";
     quizBox.appendChild(quizQuestions);
-    console.log(question)
 }
-
-
 
 var generateAnswerHTML = function(answers){
     //creates div to place answer buttons in
-    console.log(answers)
     var quizOptions = document.createElement("div");
     quizOptions.className = "answers-style";
 
@@ -199,8 +196,6 @@ var generateAnswerHTML = function(answers){
 
     var shuffledAnswers = answersArray.sort(() => Math.random() - .5);  //shuffles the questions 
     answersArray = shuffledAnswers
-
-    console.log(answersArray)
 
     for (var i = 0; i < answersArray.length; i++){
         var answerValue = answersArray[i].correct
@@ -212,74 +207,21 @@ var generateAnswerHTML = function(answers){
     }
     
     quizBox.appendChild(quizOptions);
-
 }
 
-
+// WHEN USER PICKS AN ANSWER
 var grabAnswerValue = function(event){
     var targetEl = event.target;
 
     if(targetEl.matches('.button-style')){
         var pickedAnswer = event.target.getAttribute('answer-value')
-        console.log(pickedAnswer)
-
         nextQuestion(pickedAnswer)
-
     }
 }
 
 quiz.addEventListener("click", grabAnswerValue)
 
-
-
-
-
-
-    //==================================================================//
-
-    // var optionBtn1 = document.createElement("button");
-    // optionBtn1.className = "button-style";
-    // optionBtn1.innerHTML = answers.answers[0].text;
-    // quizOptions.appendChild(optionBtn1);
-
-    // var optionBtn2 = document.createElement("button");
-    // optionBtn2.className = "button-style";
-    // optionBtn2.innerHTML = answers.answers[1].text;
-    // quizOptions.appendChild(optionBtn2);
-
-    // var optionBtn3 = document.createElement("button");
-    // optionBtn3.className = "button-style";
-    // optionBtn3.innerHTML = answers.answers[2].text;
-    // quizOptions.appendChild(optionBtn3);
-
-    // var optionBtn4 = document.createElement("button");
-    // optionBtn4.className = "button-style";
-    // optionBtn4.innerHTML = answers.answers[3].text;
-    // quizOptions.appendChild(optionBtn4);
-
-    // quizBox.appendChild(quizOptions);
-
-    // var value1 = answers.answers[0].correct;
-    // var value2 = answers.answers[1].correct;
-    // var value3 = answers.answers[2].correct;
-    // var value4 = answers.answers[2].correct;
-    
-    // optionBtn1.onclick = function () {
-    //     nextQuestion(value1);
-    // }
-    // optionBtn2.onclick = function () {
-    //     nextQuestion(value2);
-    // }
-    // optionBtn3.onclick = function () {
-    //     nextQuestion(value3);
-    // }
-    // optionBtn4.onclick = function () {
-    //     nextQuestion(value4);
-    // }
-
-
 var nextQuestion = function(rightorwrong){
-    //IF USER FINISHES ALL QUESTIONS, HOW DO I JUMP TO QUIZ END?
 
     if (rightorwrong === "false"){
         alert("Wrong Answer! 5 seconds deducted from timer")
@@ -287,19 +229,16 @@ var nextQuestion = function(rightorwrong){
     } else {
         alert("Right Answer!");
         playerStats.highScore++
-        console.log("HEELLOOOO")
         generateQuestions();
     }
 }
 
 var quizEnded = function(){
     scoreTable.push(playerStats)
-    
     quiz.remove();
     footerBox.remove();
     storeScores();
-    saveScore();
-    
+    saveScore();  
 };
 
 var storeScores = function(){
@@ -311,9 +250,12 @@ var saveScore = function() {
     var scoreMain = document.createElement("main");
     scoreMain.className = "main-style";
 
+    var scoreTitle = document.createElement("div");
+    scoreTitle.className = "questions-style";
+    scoreTitle.innerHTML = "<h1>" + "High Scores" +  "</h1>";
+
     var scoreBox = document.createElement("div");
     scoreBox.className = "questions-style";
-    scoreBox.innerHTML = "<h1>" + "High Scores" +  "</h1>";
 
     for (var i = 0; i < scoreTable.length; i++){
         var scoreName = document.createElement("div");
@@ -322,20 +264,20 @@ var saveScore = function() {
         scoreBox.appendChild(scoreName);
     }
     
-
     var playAgain = document.createElement("div");
     playAgain.className="controls-style";
     
-    playAgainBtn = document.createElement("button");
+    var playAgainBtn = document.createElement("button");
     playAgainBtn.className = "start-style";
     playAgainBtn.innerHTML = "Play Again";
 
-    resetScoresBtn = document.createElement("button");
+    var resetScoresBtn = document.createElement("button");
     resetScoresBtn.className = "start-style";
     resetScoresBtn.innerHTML = "Reset High Scores";
 
     
-    scoreMain.appendChild(scoreBox);
+    scoreMain.appendChild(scoreTitle);
+    scoreMain.appendChild(scoreBox)
     playAgain.appendChild(playAgainBtn);
     playAgain.appendChild(resetScoresBtn);
     scoreMain.appendChild(playAgain);
@@ -347,15 +289,16 @@ var saveScore = function() {
 
     resetScoresBtn.onclick = function (){
        localStorage.clear();
-       scoreName.remove();
+       scoreBox.remove();
        playAgainBtn.remove();
        resetScoresBtn.remove();
+       quiz.appendChild(scoreBox)
 
        var noScoresTitle = document.createElement("div");
        noScoresTitle.className = "directions-style";
        noScoresTitle.innerHTML = "<h3>" + "No high scores saved" +  "</h3>";
-
-       scoreBox.appendChild(noScoresTitle)
+    
+       scoreTitle.appendChild(noScoresTitle)
        playAgain.appendChild(playAgainBtn)
     }
 }
