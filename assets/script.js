@@ -151,17 +151,8 @@ var shuffleAndRenderQuestions = function(){
 
 var generateQuestions = function(){
 
-<<<<<<< HEAD
-    for (var i = 0; i < questionsArray.length; i++){
-        shuffledQuestions = questionsArray.sort(() => Math.random() - .5);  //shuffles the questions 
-        var pickedQuestion = questionsArray[i];
-        console.log(shuffledQuestions)
-        individualQuestions(pickedQuestion);
-        chooseAnswer(pickedQuestion);
-=======
     // for (var i = 0; i < questionsArray.length; i++){
     //     pickedQuestionWithChoices = questionsArray[i];
->>>>>>> resubmit/2
 
     //     // if (pickedQuestion = questionsArray.length - 1){
     //     //     quizEnded();
@@ -201,13 +192,8 @@ var generateAnswerHTML = function(answers){
     //creates div to place answer buttons in
     var quizOptions = document.createElement("div");
     quizOptions.className = "answers-style";
-<<<<<<< HEAD
-    console.log(answers.answers)
-    // create buttons to press
-=======
 
     var answersArray = answers
->>>>>>> resubmit/2
 
     var shuffledAnswers = answersArray.sort(() => Math.random() - .5);  //shuffles the questions 
     answersArray = shuffledAnswers
