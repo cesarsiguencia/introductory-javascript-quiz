@@ -152,6 +152,7 @@ var generateQuestions = function(){
     for (var i = 0; i < questionsArray.length; i++){
         shuffledQuestions = questionsArray.sort(() => Math.random() - .5);  //shuffles the questions 
         var pickedQuestion = questionsArray[i];
+        console.log(shuffledQuestions)
         individualQuestions(pickedQuestion);
         chooseAnswer(pickedQuestion);
 
@@ -168,13 +169,14 @@ var individualQuestions = function(question){
     quizBox.innerHTML =""
     quizQuestions.innerHTML = "<h2 class='first-text-style'>" + question.question + "</H2>";
     quizBox.appendChild(quizQuestions);
+    console.log(question.question)
 }
 
 var chooseAnswer = function(answers){
     //creates div to place answer buttons in
     var quizOptions = document.createElement("div");
     quizOptions.className = "answers-style";
-
+    console.log(answers.answers)
     // create buttons to press
 
     var optionBtn1 = document.createElement("button");
