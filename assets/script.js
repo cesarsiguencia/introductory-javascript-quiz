@@ -11,7 +11,7 @@ var playerStats = {
 
 var startBtn = document.querySelector("#start-button");
 var footerBox = document.querySelector("footer");
-var counter = 30;
+var counter = 500;
 var timer = ""
 var startCountdown = [];
 var questionsArray = [
@@ -141,73 +141,61 @@ var startQuiz = function(){
     timer.className = "footer-style";
     footerBox.appendChild(timer);
 
-    //=====================================================================//
 
-    // var shuffledQuestions = questionsArray.sort(() => Math.random() - .5);  //shuffles the questions 
-    // questionsArray = shuffledQuestions
-
-    //=====================================================================//
 
 
     quizTimer();
     counterFunc();
+    shuffleAndRenderQuestions();
+}
+
+var shuffleAndRenderQuestions = function(){
+    //=====================================================================//
+
+    var shuffledQuestions = questionsArray.sort(() => Math.random() - .5);  //shuffles the questions 
+    questionsArray = shuffledQuestions
+    console.log(questionsArray)
     generateQuestions()
+    //=====================================================================//
 }
 
 var generateQuestions = function(){
 
-
+    // var pickedQuestionWithChoices = ''
     for (var i = 0; i < questionsArray.length; i++){
-
-    // ============================================================ //
-
-        var shuffledQuestions = questionsArray.sort(() => Math.random() - .5);  //shuffles the questions 
-        questionsArray = shuffledQuestions
-
-    // ==============================================================// 
-
-        
-        var pickedQuestion = questionsArray[i];
-        console.log(pickedQuestion)
-
-  
-
-        individualQuestions(pickedQuestion);
-        chooseAnswer(pickedQuestion);
+        var pickedQuestionWithChoices = questionsArray[i];
 
         // if (pickedQuestion = questionsArray.length - 1){
         //     quizEnded();
         // }
-      
+        generateQuestionsHTML(pickedQuestionWithChoices.question);
+        generateAnswerHTML(pickedQuestionWithChoices.answers);
+        // return
     }
 }
+
+
+
    
-var individualQuestions = function(question){
+var generateQuestionsHTML = function(question){
     // creates div to place question in
-    console.log(question.question)
     var quizQuestions = document.createElement("div");
     quizQuestions.className = "first-box-style";
     quizBox.innerHTML =""
-    quizQuestions.innerHTML = "<h2 class='first-text-style'>" + question.question + "</H2>";
+    quizQuestions.innerHTML = "<h2 class='first-text-style'>" + question + "</H2>";
     quizBox.appendChild(quizQuestions);
+    console.log(question)
 }
 
-var chooseAnswer = function(answers){
-    //creates div to place answer buttons in
 
+
+var generateAnswerHTML = function(answers){
+    //creates div to place answer buttons in
+    console.log(answers)
     var quizOptions = document.createElement("div");
     quizOptions.className = "answers-style";
 
-
-
-
-
-
-    // create buttons to press
-    // =================================================================//
-
-    // var buttonIdCounter = 0
-    var answersArray = answers.answers
+    var answersArray = answers
 
     var shuffledAnswers = answersArray.sort(() => Math.random() - .5);  //shuffles the questions 
     answersArray = shuffledAnswers
@@ -220,36 +208,32 @@ var chooseAnswer = function(answers){
         optionBtn.className = "button-style";
         optionBtn.innerHTML = answersArray[i].text;
         optionBtn.setAttribute("answer-value", answerValue);
-
-        
         quizOptions.appendChild(optionBtn);
-
-        // buttonIdCounter++
-      
     }
+    
     quizBox.appendChild(quizOptions);
 
+}
 
-    var allBtns = document.querySelector('.button-style')
 
-    // var pickingAnswer = function(event){
+var grabAnswerValue = function(event){
+    var targetEl = event.target;
 
-  
-    // }
-    // pickingAnswer()
-    
-    allBtns.onclick = function(event) {
-        
-        var targetEl = event.target;
+    if(targetEl.matches('.button-style')){
+        var pickedAnswer = event.target.getAttribute('answer-value')
+        console.log(pickedAnswer)
 
-        if(targetEl.matches('.button-style')){
-            var pickedAnswer = event.target.getAttribute('answer-value')
+        nextQuestion(pickedAnswer)
 
-            nextQuestion(pickedAnswer)
-
-        }
-       
     }
+}
+
+quiz.addEventListener("click", grabAnswerValue)
+
+
+
+
+
 
     //==================================================================//
 
@@ -292,17 +276,18 @@ var chooseAnswer = function(answers){
     // optionBtn4.onclick = function () {
     //     nextQuestion(value4);
     // }
-}
+
 
 var nextQuestion = function(rightorwrong){
     //IF USER FINISHES ALL QUESTIONS, HOW DO I JUMP TO QUIZ END?
 
-    if (rightorwrong === false){
+    if (rightorwrong === "false"){
         alert("Wrong Answer! 5 seconds deducted from timer")
         counter = counter - 5;
     } else {
         alert("Right Answer!");
         playerStats.highScore++
+        console.log("HEELLOOOO")
         generateQuestions();
     }
 }
