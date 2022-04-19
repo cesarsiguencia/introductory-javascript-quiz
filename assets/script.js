@@ -116,7 +116,6 @@ var questionsArray = [
     }
 ];
 
-var shuffledQuestions = ""
 var playAgainBtn = ""
 
 
@@ -142,27 +141,50 @@ var startQuiz = function(){
     timer.className = "footer-style";
     footerBox.appendChild(timer);
 
+    //=====================================================================//
+
+    // var shuffledQuestions = questionsArray.sort(() => Math.random() - .5);  //shuffles the questions 
+    // questionsArray = shuffledQuestions
+
+    //=====================================================================//
+
+
     quizTimer();
     counterFunc();
-    generateQuestions();
+    generateQuestions()
 }
 
 var generateQuestions = function(){
 
+
     for (var i = 0; i < questionsArray.length; i++){
-        shuffledQuestions = questionsArray.sort(() => Math.random() - .5);  //shuffles the questions 
+
+    // ============================================================ //
+
+        var shuffledQuestions = questionsArray.sort(() => Math.random() - .5);  //shuffles the questions 
+        questionsArray = shuffledQuestions
+
+    // ==============================================================// 
+
+        
         var pickedQuestion = questionsArray[i];
+        console.log(pickedQuestion)
+
+  
+
         individualQuestions(pickedQuestion);
         chooseAnswer(pickedQuestion);
 
-        if (pickedQuestion = questionsArray.length - 1){
-            quizEnded;
-        }
+        // if (pickedQuestion = questionsArray.length - 1){
+        //     quizEnded();
+        // }
+      
     }
 }
    
 var individualQuestions = function(question){
     // creates div to place question in
+    console.log(question.question)
     var quizQuestions = document.createElement("div");
     quizQuestions.className = "first-box-style";
     quizBox.innerHTML =""
@@ -172,55 +194,104 @@ var individualQuestions = function(question){
 
 var chooseAnswer = function(answers){
     //creates div to place answer buttons in
+
     var quizOptions = document.createElement("div");
     quizOptions.className = "answers-style";
 
+
+
+
+
+
     // create buttons to press
+    // =================================================================//
 
-    var optionBtn1 = document.createElement("button");
-    optionBtn1.className = "button-style";
-    optionBtn1.innerHTML = answers.answers[0].text;
-    optionBtn1.setAttribute("answer-value", answers.answers[0].correct);
- 
-    quizOptions.appendChild(optionBtn1);
+    // var buttonIdCounter = 0
+    var answersArray = answers.answers
 
-    var optionBtn2 = document.createElement("button");
-    optionBtn2.className = "button-style";
-    optionBtn2.innerHTML = answers.answers[1].text;
-    optionBtn2.setAttribute("answer-value", answers.answers[1].correct);
-    quizOptions.appendChild(optionBtn2);
+    var shuffledAnswers = answersArray.sort(() => Math.random() - .5);  //shuffles the questions 
+    answersArray = shuffledAnswers
 
-    var optionBtn3 = document.createElement("button");
-    optionBtn3.className = "button-style";
-    optionBtn3.innerHTML = answers.answers[2].text;
-    optionBtn3.setAttribute("answer-value", answers.answers[2].correct);
-    quizOptions.appendChild(optionBtn3);
+    console.log(answersArray)
 
-    var optionBtn4 = document.createElement("button");
-    optionBtn4.className = "button-style";
-    optionBtn4.innerHTML = answers.answers[3].text;
-    optionBtn4.setAttribute("answer-value", answers.answers[3].correct);
-    quizOptions.appendChild(optionBtn4);
+    for (var i = 0; i < answersArray.length; i++){
+        var answerValue = answersArray[i].correct
+        var optionBtn = document.createElement("button");
+        optionBtn.className = "button-style";
+        optionBtn.innerHTML = answersArray[i].text;
+        optionBtn.setAttribute("answer-value", answerValue);
 
+        
+        quizOptions.appendChild(optionBtn);
+
+        // buttonIdCounter++
+      
+    }
     quizBox.appendChild(quizOptions);
 
-    var value1 = answers.answers[0].correct;
-    var value2 = answers.answers[1].correct;
-    var value3 = answers.answers[2].correct;
-    var value4 = answers.answers[2].correct;
+
+    var allBtns = document.querySelector('.button-style')
+
+    // var pickingAnswer = function(event){
+
+  
+    // }
+    // pickingAnswer()
     
-    optionBtn1.onclick = function () {
-        nextQuestion(value1);
+    allBtns.onclick = function(event) {
+        
+        var targetEl = event.target;
+
+        if(targetEl.matches('.button-style')){
+            var pickedAnswer = event.target.getAttribute('answer-value')
+
+            nextQuestion(pickedAnswer)
+
+        }
+       
     }
-    optionBtn2.onclick = function () {
-        nextQuestion(value2);
-    }
-    optionBtn3.onclick = function () {
-        nextQuestion(value3);
-    }
-    optionBtn4.onclick = function () {
-        nextQuestion(value4);
-    }
+
+    //==================================================================//
+
+    // var optionBtn1 = document.createElement("button");
+    // optionBtn1.className = "button-style";
+    // optionBtn1.innerHTML = answers.answers[0].text;
+    // quizOptions.appendChild(optionBtn1);
+
+    // var optionBtn2 = document.createElement("button");
+    // optionBtn2.className = "button-style";
+    // optionBtn2.innerHTML = answers.answers[1].text;
+    // quizOptions.appendChild(optionBtn2);
+
+    // var optionBtn3 = document.createElement("button");
+    // optionBtn3.className = "button-style";
+    // optionBtn3.innerHTML = answers.answers[2].text;
+    // quizOptions.appendChild(optionBtn3);
+
+    // var optionBtn4 = document.createElement("button");
+    // optionBtn4.className = "button-style";
+    // optionBtn4.innerHTML = answers.answers[3].text;
+    // quizOptions.appendChild(optionBtn4);
+
+    // quizBox.appendChild(quizOptions);
+
+    // var value1 = answers.answers[0].correct;
+    // var value2 = answers.answers[1].correct;
+    // var value3 = answers.answers[2].correct;
+    // var value4 = answers.answers[2].correct;
+    
+    // optionBtn1.onclick = function () {
+    //     nextQuestion(value1);
+    // }
+    // optionBtn2.onclick = function () {
+    //     nextQuestion(value2);
+    // }
+    // optionBtn3.onclick = function () {
+    //     nextQuestion(value3);
+    // }
+    // optionBtn4.onclick = function () {
+    //     nextQuestion(value4);
+    // }
 }
 
 var nextQuestion = function(rightorwrong){
