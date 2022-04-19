@@ -1,6 +1,6 @@
 # introductory-javascript-quiz
 
-This is a quiz game to test a beginners knowledge on JavaScript. The test is timed and the time gets shorter with each wrong answer.
+This is a quiz game to test a beginners knowledge on JavaScript. The test is one minute long and the time gets reduved by 5 seconds with each wrong answer. Test your knowledge with other Javascript students by comparing high scores right in the app. Have fun!
 
 ### Website Link
 
